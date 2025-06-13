@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Конвертер валют</title>
+    </head>
+
+    <body>
+        <h1>Конвертация рублей в валюту</h1>
+        <label>Сумма в рублях:
+            <input type="number" id="amount" />
+        </label>
+        <br />
+        <label>Выберите валюту:
+            <select id="currency">
+                <option value="usd">USD</option>
+                <option value="eur">EUR</option>
+                <option value="cny">CNY</option>
+            </select>
+        </label>
+        <br />
+        <button onclick="convert()">Конвертировать</button>
+        <p id="result"></p>
+
+        <script>
+            let rates = {};
+
+            // Загрузка курса из exchange.json
+            fetch('exchange.json')
+                .then(response => response.json())
+                .then(data => {
+                    rates = data;
+                });
+
+            function convert() {
+                const amount = parseFloat(document.getElementById('amount').value);
+                const currency = document.getElementById('currency').value;
+
+                if (!rates[currency]) {
+                    document.getElementById('result').textContent = "Ошибка: курс не найден.";
+                    return;
+                }
+
+                const result = amount / rates[currency];
+                document.getElementById('result').textContent =
+                    `${amount} рублей = ${result.toFixed(2)} ${currency.toUpperCase()}`;
+            }
+        </script>
+    </body>
+
+    </html>
+
+    <!-- <script>
+        let sumRub = 10000
+        let request = new XMLHttpRequest();
+        request.open("GET", "exchange.json");
+        request.send();
+
+        request.addEventListener("load", () => {
+            if (request.status == 200) {
+                console.log(request.response);
+                let data = JSON.parse(request.response);
+                console.log(`${sumRub} рублей это:`)
+                console.log("USD: ", (sumRub / data.usd).toFixed(2));
+                console.log("EUR: ", (sumRub / data.eur).toFixed(2));
+                console.log("CNY: ", (sumRub / data.cny).toFixed(2));
+            } else {
+                console.log("Что-то пошло не так");
+            }
+        }) -->
+    </script>
+</body>
+
+</html>
